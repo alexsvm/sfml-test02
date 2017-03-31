@@ -1,6 +1,6 @@
 #pragma once
-#include <SFGUI/SFGUI.hpp>
-#include <SFGUI/Widgets.hpp>
+#include <SFGUI\SFGUI.hpp>
+#include <SFGUI\Widgets.hpp>
 #include <SFML\System.hpp>
 #include <SFML\Window.hpp>
 #include <SFML\Graphics.hpp>
@@ -12,31 +12,30 @@ public:
 	sfGUI() {
 
 		label = sfg::Label::Create("Hello world!");
-
-		//std::string str = ;
 		label2 = sfg::Label::Create("Click count = " + std::to_string(click_count));
-		//sfg::Label::Ptr _label = label;
 		
 		button = sfg::Button::Create("Greet SFGUI!");
 		button->GetSignal(sfg::Widget::OnLeftClick).Connect(std::bind(&sfGUI::button_OnClick, this));
 		button2 = sfg::Button::Create("ClickMe!");
 		button2->GetSignal(sfg::Widget::OnLeftClick).Connect(std::bind(&sfGUI::button2_OnClick, this));
-			//Connect([_label] { _label->SetText("Hello SFGUI, pleased to meet you!"); });
+		//lambda - Connect([_label] { _label->SetText("Hello SFGUI, pleased to meet you!"); });
 
 		box = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 10.0f);
 		box->Pack(label);
 		box->Pack(button, false);
+		
+		// Create a separator.
+		auto separator = sfg::Separator::Create(sfg::Separator::Orientation::HORIZONTAL);
+		// Add separator to box and set not to expand.
+		box->Pack(separator, false, true);
+
 		box->Pack(label2);
 		box->Pack(button2, false);
-
 		window = sfg::Window::Create();
 		window->SetTitle("Hello world!"); 
 		window->SetStyle(sfg::Window::TOPLEVEL); //|| sfg::Window::SHADOW || sfg::Window::TITLEBAR || sfg::Window::BACKGROUND
-
 		window->Add(box);
-
 		desktop.Add(window);
-
 	};
 	void HandleEvent(sf::Event event) {
 		desktop.HandleEvent(event);
@@ -63,9 +62,10 @@ private:
 	void button_OnClick() {
 		label->SetText("Hello SFGUI, pleased to meet you!");
 	}
+
 	void button2_OnClick() {
 		++click_count;
-		//std::string str = ;
 		label2->SetText("Click count = " + std::to_string(click_count));
 	}
+
 };
