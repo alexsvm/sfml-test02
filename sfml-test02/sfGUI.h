@@ -24,17 +24,18 @@ public:
 		box->Pack(label);
 		box->Pack(button, false);
 		
-		// Create a separator.
-		auto separator = sfg::Separator::Create(sfg::Separator::Orientation::HORIZONTAL);
-		// Add separator to box and set not to expand.
-		box->Pack(separator, false, true);
+		//auto separator = sfg::Separator::Create(sfg::Separator::Orientation::HORIZONTAL); // Create a separator.
+		box->Pack(sfg::Separator::Create(sfg::Separator::Orientation::HORIZONTAL), false, true); // Add separator to box and set not to expand.
 
 		box->Pack(label2);
 		box->Pack(button2, false);
+
+
 		window = sfg::Window::Create();
 		window->SetTitle("Hello world!"); 
-		window->SetStyle(sfg::Window::TOPLEVEL); //|| sfg::Window::SHADOW || sfg::Window::TITLEBAR || sfg::Window::BACKGROUND
+		window->SetStyle(0b00011111); //|| sfg::Window::TOPLEVEL sfg::Window::SHADOW || sfg::Window::TITLEBAR || sfg::Window::BACKGROUND
 		window->Add(box);
+
 		desktop.Add(window);
 	};
 	void HandleEvent(sf::Event event) {

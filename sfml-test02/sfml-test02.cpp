@@ -7,7 +7,10 @@
 
 int main() {
 	
-	sf::RenderWindow render_window(sf::VideoMode(800, 600), "Hello world!", sf::Style::Close); // Create SFML's window.
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 8;
+
+	sf::RenderWindow render_window(sf::VideoMode(800, 600), "Hello world!", sf::Style::Close, settings); // Create SFML's window.
 	sfGUI sfgui;
 
 	render_window.resetGLStates();
@@ -21,6 +24,13 @@ int main() {
 	shape.setPosition(400, 400);
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
+
+	
+	settings = render_window.getSettings();
+	std::cout << "depth bits:" << settings.depthBits << std::endl;
+	std::cout << "stencil bits:" << settings.stencilBits << std::endl;
+	std::cout << "antialiasing level:" << settings.antialiasingLevel << std::endl;
+	std::cout << "version:" << settings.majorVersion << "." << settings.minorVersion << std::endl;
 
 	// Main loop!
 	sf::Event event;
