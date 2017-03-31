@@ -33,7 +33,7 @@ public:
 
 		window = sfg::Window::Create();
 		window->SetTitle("Hello world!"); 
-		window->SetStyle(0b00011111); //|| sfg::Window::TOPLEVEL sfg::Window::SHADOW || sfg::Window::TITLEBAR || sfg::Window::BACKGROUND
+		window->SetStyle(0b00001011); //|| sfg::Window::TOPLEVEL sfg::Window::SHADOW || sfg::Window::TITLEBAR || sfg::Window::BACKGROUND
 		window->Add(box);
 
 		desktop.Add(window);
