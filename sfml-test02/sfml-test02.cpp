@@ -3,7 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "sfGUI.h";
+#include "sfGUI.h"
+#include "items.h"
 
 int main() {
 	
@@ -24,7 +25,7 @@ int main() {
 	shape.setPosition(400, 400);
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
-
+	shapes_create(10);
 	
 	settings = render_window.getSettings();
 	std::cout << "depth bits:" << settings.depthBits << std::endl;
@@ -32,32 +33,39 @@ int main() {
 	std::cout << "antialiasing level:" << settings.antialiasingLevel << std::endl;
 	std::cout << "version:" << settings.majorVersion << "." << settings.minorVersion << std::endl;
 
-	// Main loop!
+	// Main loop
 	sf::Event event;
 	sf::Clock clock;
+	float sec;
 
 	while (render_window.isOpen()) {
 		while (render_window.pollEvent(event)) { // Event processing.
-
+			//
 			sfgui.HandleEvent(event);
-
+			shapes_HandleEvent(event);
+			//
 			if (event.type == sf::Event::Closed) { // If window is about to be closed, leave program.
 				return 0;
 			}
+			//
 		}
 
-		sfgui.Update(clock.restart().asSeconds()); // Update SFGUI with elapsed seconds since last call.
-
+		// Update app state
+		sec = clock.restart().asSeconds();
+		sfgui.Update(sec); // Update SFGUI with elapsed seconds since last call.
+		shapes_update(sec);
 
 		// Rendering.
 		render_window.clear();
 
 		render_window.draw(shape);
-
+		shapes_render(render_window);
 		sfgui.Render(render_window);
 
 		render_window.display();
 	}
+
+	shapes_free();
 
 	return 0;
 }
