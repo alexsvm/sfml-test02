@@ -7,7 +7,8 @@
 #include "items.h"
 
 int main() {
-	
+	srand(time(nullptr));
+
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
 
@@ -16,16 +17,6 @@ int main() {
 
 	render_window.resetGLStates();
 	
-	/////////////////////////////////////////////////////////////////////////////////////////////
-	sf::CircleShape shape(50);
-	shape.setFillColor(sf::Color(150, 50, 250));
-	// set a 10-pixel wide orange outline
-	shape.setOutlineThickness(10);
-	shape.setOutlineColor(sf::Color(250, 150, 100));
-	shape.setPosition(400, 400);
-	/////////////////////////////////////////////////////////////////////////////////////////////
-
-	shapes_create(10);
 	
 	settings = render_window.getSettings();
 	std::cout << "depth bits:" << settings.depthBits << std::endl;
@@ -58,7 +49,6 @@ int main() {
 		// Rendering.
 		render_window.clear();
 
-		render_window.draw(shape);
 		shapes_render(render_window);
 		sfgui.Render(render_window);
 

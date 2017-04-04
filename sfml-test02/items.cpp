@@ -27,7 +27,7 @@ void shapes_update(float delta_time) {
 void shapes_render(sf::RenderWindow &target_window) {
 	list<sf::Shape*>::iterator it = shapes.begin();
 	for (; it != shapes.end(); ++it)
-		target_window.draw(**it);;
+			target_window.draw(**it);
 }
 
 void shapes_HandleEvent(sf::Event event) {
@@ -35,5 +35,8 @@ void shapes_HandleEvent(sf::Event event) {
 }
 
 void shapes_free() {
-	shapes.clear();
+	sf::Shape* shape;
+	for (size_t i = shapes.size(); i > 0; i--) {
+		shapes.pop_front();
+	}
 }
