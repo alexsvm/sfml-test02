@@ -20,6 +20,9 @@ public:
 		//button->GetSignal(sfg::Widget::OnLeftClick).Connect(std::bind(&sfGUI::button_OnClick, this));
 		//button2 = sfg::Button::Create("ClickMe!");
 		//button2->GetSignal(sfg::Widget::OnLeftClick).Connect(std::bind(&sfGUI::button2_OnClick, this));
+		btnToggle = sfg::Button::Create("toggle visibility");
+		btnToggle->GetSignal(sfg::Widget::OnLeftClick).Connect(std::bind(&sfGUI::btnToggle_OnClick, this));
+
 		btnClear = sfg::Button::Create("Clear shape list");
 		btnClear->GetSignal(sfg::Widget::OnLeftClick).Connect(std::bind(&sfGUI::btnClear_OnClick, this));
 
@@ -32,7 +35,7 @@ public:
 		speedbtn_n->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&sfGUI::speedbtn_n_OnValueChange, this));
 
 		speedbtn_r = sfg::SpinButton::Create(10.f, 400.f, 10.f); // Create the SpinButton itself.
-		speedbtn_r->SetText("100");
+		speedbtn_r->SetValue(100.f);
 		speedbtn_r->SetRequisition(sf::Vector2f(80.f, 0.f)); // Just like an Entry, you need to specify a minimum width for the SpinButton.
 		speedbtn_r->SetDigits(0);// Set the number of digits to display after the decimal point.
 		speedbtn_r->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&sfGUI::speedbtn_r_OnValueChange, this));
@@ -59,6 +62,8 @@ public:
 		box->Pack(btnCreateCircleShape, false);
 		box->Pack(sfg::Separator::Create(sfg::Separator::Orientation::HORIZONTAL), false, true);
 		box->Pack(btnClear, false);
+		box->Pack(btnToggle, false);
+		
 
 		window = sfg::Window::Create();
 		window->SetTitle("Hello world!"); 
@@ -81,8 +86,7 @@ private:
 	int click_count = 0;
 	sfg::SFGUI _sfgui;
 
-	sfg::Button::Ptr button;
-	sfg::Button::Ptr button2;
+	sfg::Button::Ptr btnToggle;
 	sfg::Button::Ptr btnCreateCircleShape;
 	sfg::Button::Ptr btnClear;
 	sfg::Box::Ptr box;
@@ -111,8 +115,8 @@ private:
 		//auto inverse_fraction = 1.f - (speedbtn_n->GetValue() - adjustment->GetLower()) / range;
 	}
 
-	void button2_OnClick() {
-
+	void btnToggle_OnClick() {
+		
 	}
 
 	void btnCreateRect_OnClick() {
@@ -139,6 +143,7 @@ private:
 		c->setOutlineColor(color);
 
 		c->setOutlineThickness(rand() % 10 + 1);
+		c->setOrigin(r, r);
 		c->setPosition(rand() % 600, rand() % 600);
 		c->setRotation(rand() % 360);
 		shapes_add(c);

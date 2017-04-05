@@ -17,6 +17,7 @@ int main() {
 
 	render_window.resetGLStates();
 	
+	shapes_init();
 	
 	settings = render_window.getSettings();
 	std::cout << "depth bits:" << settings.depthBits << std::endl;
