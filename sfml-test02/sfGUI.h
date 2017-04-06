@@ -1,9 +1,10 @@
 #pragma once
+
 #include <SFGUI\SFGUI.hpp>
 #include <SFGUI\Widgets.hpp>
-#include <SFML\System.hpp>
-#include <SFML\Window.hpp>
-#include <SFML\Graphics.hpp>
+//#include <SFML\System.hpp>
+//#include <SFML\Window.hpp>
+//#include <SFML\Graphics.hpp>
 #include "items.h"
 
 class sfGUI {
@@ -144,7 +145,7 @@ private:
 
 		c->setOutlineThickness(rand() % 10 + 1);
 		c->setOrigin(r, r);
-		c->setPosition(rand() % 600, rand() % 600);
+		c->setPosition(rand() % 600 + 100, rand() % 600 + 100);
 		c->setRotation(rand() % 360);
 		shapes_add(c);
 	}

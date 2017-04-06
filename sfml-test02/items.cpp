@@ -1,6 +1,6 @@
 #include <typeinfo>
-#include "items.h"
 #include <iostream>
+#include "items.h"
 
 
 list<sf::Shape*> shapes;
@@ -35,7 +35,7 @@ sf::Shape *shapes_add(sf::Shape *shape) {
 	return shape;
 }
 
-sf::Shape * shapes_selected()
+sf::Shape *shapes_selected()
 {
 	return _selected;
 }
@@ -74,7 +74,7 @@ void shapes_SelectNearest(int x, int y) {
 	list<sf::Shape*>::reverse_iterator it = shapes.rbegin();
 	sf::Vector2f v;
 	float r2, d2;
-	cout << "x=" << x << ", y=" << y << endl;
+	//cout << "x=" << x << ", y=" << y << endl;
 	for (; it != shapes.rend(); ++it) {
 		if (typeid(**it) == typeid(sf::CircleShape)) {
 			sf::CircleShape *c = dynamic_cast<sf::CircleShape *> (*it);
@@ -88,7 +88,7 @@ void shapes_SelectNearest(int x, int y) {
 			r2 *= r2;
 		}
 		d2 = (v.x - x)*(v.x - x) + (v.y - y)*(v.y - y);
-		cout << "    v.x=" << v.x << ", v.y=" << v.y << endl;
+		//cout << "    v.x=" << v.x << ", v.y=" << v.y << endl;
 		if (r2 > d2) {
 			_selected = *it;
 			return;
@@ -116,10 +116,14 @@ void _selected_resize(float delta) {
 	}
 }
 
-void shapes_HandleEvent(sf::Event event) {
+void shapes_HandleEvent(sf::Event event, sf::RenderWindow &target_window) {
 	if (event.type == sf::Event::MouseButtonPressed) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
-			shapes_SelectNearest(event.mouseButton.x, event.mouseButton.y);
+			sf::View view = target_window.getView();
+			sf::Vector2f vc = view.getCenter();
+			sf::Vector2f vs = view.getSize();
+			cout << vs.x << "x" << vs.y << " - "<< vc.x << "," << vc.y << endl;
+			shapes_SelectNearest(event.mouseButton.x + vc.x - vs.x/2, event.mouseButton.y + vc.y - vs.y/2);
 			if (_selected) {
 				sf::Vector2f pos;
 				pos = _selected->getPosition();
