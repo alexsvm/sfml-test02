@@ -2,6 +2,9 @@
 //#include "main.h"
 #include "sfGUI.h"
 #include "items.h"
+#include "ColorConsole.h"
+
+#define minimum_frame_per_seconds 30
 
 int main() {
 	float _mx, _my;
@@ -18,35 +21,22 @@ int main() {
 	render_window.resetGLStates();
 	
 	shapes_init();
-	//
-#define TCR 200
-	sf::Color color;
-	sf::CircleShape test_circle = sf::CircleShape(TCR, 16);
-	color.r = 0;
-	color.g = 255;
-	color.b = 0;
-	color.a = 200;
-	test_circle.setFillColor(color);
 
-	color.r = 255;
-	color.g = 0;
-	color.b = 0;
-	color.a = 255;
-	test_circle.setOutlineColor(color);
-	test_circle.setOutlineThickness(3);
-	test_circle.setOrigin(TCR, TCR);
-	test_circle.setPosition(1000, 500);
-
-	//
 	settings = render_window.getSettings();
 	std::cout << "depth bits:" << settings.depthBits << std::endl;
 	std::cout << "stencil bits:" << settings.stencilBits << std::endl;
 	std::cout << "antialiasing level:" << settings.antialiasingLevel << std::endl;
 	std::cout << "version:" << settings.majorVersion << "." << settings.minorVersion << std::endl;
+	std::cout << cyan << "cyan " << magenta << "magenta " << yellow << "yellow " << grey << "grey "<< endl;
+	std::cout << light_cyan << "light_cyan " << light_magenta << "light_magenta " << light_yellow << "light_yellow " << white << "white"<< endl;
+	std::cout << light_red << " red " << on_blue << " on blue " << grey << on_black << "back in black " << endl;
 
-	// Main loop
+	// ============================ Main loop ======================================
 	sf::Event event;
 	sf::Clock clock;
+	sf::Time timeSinceLastUpdate;
+	sf::Time timePerFrame = sf::seconds(1.f / minimum_frame_per_seconds);
+	
 	float sec;
 
 	while (render_window.isOpen()) {
@@ -111,16 +101,20 @@ int main() {
 					_my = event.mouseMove.y;
 				}
 			} // <=MouseMoved
-		}
+		} // <= Event processing
 
-		// Update app state
-		sec = clock.restart().asSeconds();
-		sfgui.Update(sec); // Update SFGUI with elapsed seconds since last call.
-		shapes_update(sec);
+		timeSinceLastUpdate = clock.restart();
+		while (timeSinceLastUpdate > timePerFrame) {
+			timeSinceLastUpdate -= timePerFrame;
+			sfgui.Update(timeSinceLastUpdate);
+			shapes_update(timeSinceLastUpdate);
+		}
+		sfgui.Update(timeSinceLastUpdate);
+		shapes_update(timeSinceLastUpdate);
 
 		// Rendering.
 		render_window.clear();
-		render_window.draw(test_circle);
+
 		shapes_render(render_window);
 		sfgui.Render(render_window);
 

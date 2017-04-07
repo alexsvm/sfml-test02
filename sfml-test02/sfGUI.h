@@ -68,21 +68,25 @@ public:
 
 		window = sfg::Window::Create();
 		window->SetTitle("Hello world!"); 
-		window->SetStyle(0b000011011); //|| sfg::Window::TOPLEVEL sfg::Window::SHADOW || sfg::Window::TITLEBAR || sfg::Window::BACKGROUND sfg::Window::Style::CLOSE
+		window->SetStyle(sfg::Window::BACKGROUND);
 		window->Add(box);
-
-		window->GetSignal(sfg::Window::OnCloseButton).Connect([this] { window_OnHideWindowClick(); }); // _ LOOK HERE!!!! binding!!!!
+		window->GetSignal(sfg::Window::OnCloseButton).Connect([this] { window_OnHideWindowClick(); });
+		window->SetPosition(sf::Vector2f(0.f, 0.f));
 		desktop.Add(window);
 	};
-	void HandleEvent(sf::Event event) {
-		desktop.HandleEvent(event);
+
+	void HandleEvent(sf::Event event) { 
+		desktop.HandleEvent(event);			
 	}
-	void Update(float delta_time) {
-		desktop.Update(delta_time);
+
+	void Update(sf::Time delta_time) {
+		desktop.Update(delta_time.asSeconds());
 	}
+
 	void Render(sf::RenderWindow &target_window) {
 		_sfgui.Display(target_window);
 	}
+
 private:
 	int click_count = 0;
 	sfg::SFGUI _sfgui;

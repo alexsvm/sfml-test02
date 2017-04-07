@@ -40,7 +40,7 @@ sf::Shape *shapes_selected()
 	return _selected;
 }
 
-void shapes_update(float delta_time) {
+void shapes_update(sf::Time delta_time) {
 	
 }
 
