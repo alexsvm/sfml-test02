@@ -87,6 +87,8 @@ public:
 		_sfgui.Display(target_window);
 	}
 
+	Shapes *_shapes;
+
 private:
 	int click_count = 0;
 	sfg::SFGUI _sfgui;
@@ -101,7 +103,7 @@ private:
 	sfg::Desktop desktop;
 
 	void btnClear_OnClick() {
-		shapes_free();
+		_shapes->Clear();
 	}
 
 	void window_OnHideWindowClick() {
@@ -151,6 +153,6 @@ private:
 		c->setOrigin(r, r);
 		c->setPosition(rand() % 600 + 100, rand() % 600 + 100);
 		c->setRotation(rand() % 360);
-		shapes_add(c);
+		_shapes->Add(c);
 	}
 };

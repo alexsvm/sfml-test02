@@ -2,11 +2,16 @@
 //#include "main.h"
 #include "sfGUI.h"
 #include "items.h"
+#include "nomads.h"
 #include "ColorConsole.h"
+#include "FrameClock.h"
+#include "ClockHUD.h"
 
 #define minimum_frame_per_seconds 30
 
 int main() {
+	srand(std::time(NULL));
+
 	float _mx, _my;
 
 	srand(time(nullptr));
@@ -17,10 +22,13 @@ int main() {
 	sf::RenderWindow render_window(sf::VideoMode(800, 800), "Hello world!", sf::Style::Default, settings); // Create SFML's window.
 
 	sfGUI sfgui;
+	nomad nomad1(100, 100, 200);
+	nomad1.Start();
 
 	render_window.resetGLStates();
-	
-	shapes_init();
+
+	Shapes shapes;
+	sfgui._shapes = &shapes;
 
 	settings = render_window.getSettings();
 	std::cout << "depth bits:" << settings.depthBits << std::endl;
@@ -36,14 +44,28 @@ int main() {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate;
 	sf::Time timePerFrame = sf::seconds(1.f / minimum_frame_per_seconds);
-	
+
+	// === FPS HUD ===
+	sf::Font font;
+	if (!font.loadFromFile("fonts\\hermes.ttf"))
+	{
+		sf::err() << "Failed to load 01-digit.ttf";
+		return EXIT_FAILURE;
+	}
+	sfx::FrameClock f_clock;
+	ClockHUD hud(f_clock, font);
+	f_clock.setSampleDepth(100); // Sample 100 frames for averaging.
+
 	float sec;
 
 	while (render_window.isOpen()) {
+		f_clock.beginFrame(); // Start a new frame.
+
 		while (render_window.pollEvent(event)) { // Event processing.
 			//
 			sfgui.HandleEvent(event);
-			shapes_HandleEvent(event, render_window);
+			shapes.HandleEvent(event, render_window);
+			nomad1.HandleEvent(event);
 			//
 			if (event.type == sf::Event::Closed) { // If window is about to be closed, leave program.
 				return 0;
@@ -92,7 +114,7 @@ int main() {
 				}
 			} // <=MouseButtonReleased
 			if (event.type == sf::Event::MouseMoved) {
-				if (!shapes_selected() && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+				if (!shapes.Selected() && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 					sf::Vector2i mc = sf::Mouse::getPosition();
 					sf::View view = render_window.getView();
 					view.move(_mx - event.mouseMove.x, _my - event.mouseMove.y);
@@ -107,21 +129,27 @@ int main() {
 		while (timeSinceLastUpdate > timePerFrame) {
 			timeSinceLastUpdate -= timePerFrame;
 			sfgui.Update(timeSinceLastUpdate);
-			shapes_update(timeSinceLastUpdate);
+			shapes.Update(timeSinceLastUpdate);
+			nomad1.Update(timeSinceLastUpdate);
 		}
 		sfgui.Update(timeSinceLastUpdate);
-		shapes_update(timeSinceLastUpdate);
+		shapes.Update(timeSinceLastUpdate);
+		nomad1.Update(timeSinceLastUpdate);
 
 		// Rendering.
 		render_window.clear();
 
-		shapes_render(render_window);
+		shapes.Render(render_window);
+		nomad1.Render(render_window);
 		sfgui.Render(render_window);
 
-		render_window.display();
-	}
+		render_window.draw(hud);
 
-	shapes_free();
+		render_window.display();
+
+		
+		f_clock.endFrame(); // End frame.
+	}
 
 	return 0;
 }

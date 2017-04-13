@@ -3,21 +3,41 @@
 #include "items.h"
 
 
-list<sf::Shape*> shapes;
-sf::Shape *_selected = nullptr;
-sf::RectangleShape _frame;
+//list<sf::Shape*> shapes;
+//sf::Shape *_selected = nullptr;
+//sf::RectangleShape _frame;
 
-float _dx, _dy; // 
-bool _is_move; //
+//float _dx, _dy; // 
+//bool _is_move; //
 
+/*
 void shapes_init()
 {
+	
+	_frame.setFillColor(sf::Color::Transparent);
+	_frame.setOutlineThickness(1);
+	_frame.setOutlineColor(sf::Color::Red);
+}
+*/
+
+Shapes::Shapes() {
+	_selected = nullptr;
 	_frame.setFillColor(sf::Color::Transparent);
 	_frame.setOutlineThickness(1);
 	_frame.setOutlineColor(sf::Color::Red);
 }
 
-void shapes_create(int count) {
+Shapes::~Shapes() {
+	Clear();
+}
+
+void Shapes::Clear() {
+	for (size_t i = shapes.size(); i > 0; i--) {
+		shapes.pop_front();
+	}
+}
+
+void Shapes::Create_Shapes(int count) {
 
 	sf::CircleShape *c;
 	for (; count > 0; count--) {
@@ -30,21 +50,23 @@ void shapes_create(int count) {
 	}
 }
 
-sf::Shape *shapes_add(sf::Shape *shape) {
+
+
+sf::Shape *Shapes::Add(sf::Shape *shape) {
 	shapes.push_back(shape);
 	return shape;
 }
 
-sf::Shape *shapes_selected()
+sf::Shape *Shapes::Selected()
 {
 	return _selected;
 }
 
-void shapes_update(sf::Time delta_time) {
+void Shapes::Update(sf::Time delta_time) {
 	
 }
 
-void shapes_render(sf::RenderWindow &target_window) {
+void Shapes::Render(sf::RenderWindow &target_window) {
 	list<sf::Shape*>::iterator it = shapes.begin();
 	for (; it != shapes.end(); ++it) {
 		target_window.draw(**it); // Draw shape
@@ -70,7 +92,7 @@ void shapes_render(sf::RenderWindow &target_window) {
 	}
 }
 
-void shapes_SelectNearest(int x, int y) {
+void Shapes::SelectNearest(int x, int y) {
 	list<sf::Shape*>::reverse_iterator it = shapes.rbegin();
 	sf::Vector2f v;
 	float r2, d2;
@@ -97,7 +119,7 @@ void shapes_SelectNearest(int x, int y) {
 	_selected = nullptr;
 }
 
-void _selected_resize(float delta) {
+void Shapes::Selected_Resize(float delta) {
 	if (_selected) {
 		if (typeid(*_selected) == typeid(sf::CircleShape)) {
 			sf::CircleShape *c = dynamic_cast<sf::CircleShape *> (_selected);
@@ -116,14 +138,15 @@ void _selected_resize(float delta) {
 	}
 }
 
-void shapes_HandleEvent(sf::Event event, sf::RenderWindow &target_window) {
+void Shapes::HandleEvent(sf::Event event, sf::RenderWindow &target_window) {
+	if (shapes.empty()) return;
 	if (event.type == sf::Event::MouseButtonPressed) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
 			sf::View view = target_window.getView();
 			sf::Vector2f vc = view.getCenter();
 			sf::Vector2f vs = view.getSize();
 			cout << vs.x << "x" << vs.y << " - "<< vc.x << "," << vc.y << endl;
-			shapes_SelectNearest(event.mouseButton.x + vc.x - vs.x/2, event.mouseButton.y + vc.y - vs.y/2);
+			SelectNearest(event.mouseButton.x + vc.x - vs.x/2, event.mouseButton.y + vc.y - vs.y/2);
 			if (_selected) {
 				sf::Vector2f pos;
 				pos = _selected->getPosition();
@@ -155,7 +178,7 @@ void shapes_HandleEvent(sf::Event event, sf::RenderWindow &target_window) {
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)) {
 				_selected->setRotation(_selected->getRotation() + event.mouseWheelScroll.delta);
 			}else {
-				_selected_resize(event.mouseWheelScroll.delta);
+				Selected_Resize(event.mouseWheelScroll.delta);
 			}
 			
 		}
@@ -169,8 +192,4 @@ void shapes_HandleEvent(sf::Event event, sf::RenderWindow &target_window) {
 	} // KeyPressed
 }
 
-void shapes_free() {
-	for (size_t i = shapes.size(); i > 0; i--) {
-		shapes.pop_front();
-	}
-}
+

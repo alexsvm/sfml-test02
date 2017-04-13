@@ -5,11 +5,29 @@
 
 using namespace std;
 
-void shapes_init();
-void shapes_create(int count);
-sf::Shape *shapes_add(sf::Shape *shape);
-sf::Shape *shapes_selected();
-void shapes_update(sf::Time delta_time);
-void shapes_render(sf::RenderWindow &target_window);
-void shapes_HandleEvent(sf::Event event, sf::RenderWindow &target_window);
-void shapes_free();
+class Shapes {
+private:
+	list<sf::Shape*> shapes;
+	sf::Shape *_selected = nullptr;
+	sf::RectangleShape _frame;
+
+	float _dx, _dy; // 
+	bool _is_move; //
+
+	void SelectNearest(int x, int y);
+	void Shapes::Selected_Resize(float delta);
+
+public:
+	Shapes();
+	~Shapes();
+	void Clear();
+	void Create_Shapes(int count);
+	sf::Shape *Add(sf::Shape *shape);
+	sf::Shape *Selected();
+	void Update(sf::Time delta_time);
+	void Render(sf::RenderWindow &target_window);
+	void HandleEvent(sf::Event event, sf::RenderWindow &target_window);
+};
+
+
+
