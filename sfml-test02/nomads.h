@@ -22,8 +22,8 @@ private:
 	enum State { stopped, running };
 	State state;
 public:
-	nomad(float x, float y, float size): dir_rnd_factor(0.5), speed(20.f), accel(0.02), 
-			accel_change_period(2000.f), dir_change_period(3000.f), state(stopped), 
+	nomad(float x, float y, float size): dir_rnd_factor(0.5), speed(20.f), accel(0.f), 
+			accel_change_period(2000.f), dir_change_period(2000.f), state(stopped), 
 			time_change(0.f), time_change_speed(0.f), time_change_accel(0.f), time_change_dir(0.f)
 	{
 		dir.x = 100; dir.y = 0;		
@@ -44,20 +44,20 @@ public:
 		if (time_change < move_period) {
 			time_change += delta_time.asMicroseconds();
 		} else {
-			float distance = speed * time_change / 1000000.f; // in px
+			float distance = speed * time_change / 1000000.f + accel * (time_change* time_change) /2000000.f; // in px
 			float k = distance / sqrtf(dir.x*dir.x + dir.y*dir.y);
 			float delta_x = dir.x * k;
 			float delta_y = dir.y * k;
 			shape->move(delta_x, delta_y);
-
 			time_change = 0;
 		}
-		if (time_change_dir < dir_change_period) {
+		if (time_change_dir < dir_change_period) { // Время менять направление?
 			time_change_dir += delta_time.asMilliseconds();
 		}
 		else {
-			dir.x = rand() % 200 - 100;
-			dir.y = rand() % 200 - 100;
+			sf::Transform rotation;
+			rotation.rotate(rand() % 180 - 90);
+			dir = rotation.transformPoint(dir);
 			time_change_dir = 0;
 		}
 

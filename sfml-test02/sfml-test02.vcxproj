@@ -153,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClockHUD.h" />
+    <ClInclude Include="collision.h" />
     <ClInclude Include="ColorConsole.h" />
     <ClInclude Include="FrameClock.h" />
     <ClInclude Include="items.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="collision.cpp" />
     <ClCompile Include="items.cpp" />
     <ClCompile Include="sfml-test02.cpp" />
     <ClCompile Include="stdafx.cpp" />

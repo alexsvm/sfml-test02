@@ -22,14 +22,13 @@ int main() {
 	sf::RenderWindow render_window(sf::VideoMode(800, 800), "Hello world!", sf::Style::Default, settings); // Create SFML's window.
 
 	sfGUI sfgui;
-	nomad nomad1(100, 100, 200);
-	nomad1.Start();
-
-	render_window.resetGLStates();
-
 	Shapes shapes;
+	nomad nomad1(100, 100, 200);
 	sfgui._shapes = &shapes;
-
+	nomad1.Start();
+	
+	render_window.resetGLStates();
+	
 	settings = render_window.getSettings();
 	std::cout << "depth bits:" << settings.depthBits << std::endl;
 	std::cout << "stencil bits:" << settings.stencilBits << std::endl;
