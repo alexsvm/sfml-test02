@@ -150,5 +150,10 @@ int main() {
 		f_clock.endFrame(); // End frame.
 	}
 
+	// The end
+	cout << endl << "\n\nEnter to exit...";
+	cin.get();
+
+
 	return 0;
 }
