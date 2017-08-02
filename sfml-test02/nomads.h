@@ -22,7 +22,7 @@ private:
 	enum State { stopped, running };
 	State state;
 public:
-	nomad(float x, float y, float size): dir_rnd_factor(0.5), speed(20.f), accel(0.f), 
+	nomad(float x, float y, float size): dir_rnd_factor(0.5), speed(80.f), accel(0.f), 
 			accel_change_period(2000.f), dir_change_period(2000.f), state(stopped), 
 			time_change(0.f), time_change_speed(0.f), time_change_accel(0.f), time_change_dir(0.f)
 	{
